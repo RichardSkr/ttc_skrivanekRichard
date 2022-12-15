@@ -1,39 +1,28 @@
-package TTC.data.data;
+package TTC.action;
 
 import TTC.data.InputData;
 import TTC.data.OutputData;
+import TTC.action.actionInterface.ActionInt;
 
 import java.io.IOException;
 
-public class DataActionImpl implements DataActionInt {
+/**
+ * Program hierarchy and optional parametr.
+ */
+public class ActionImpl implements ActionInt {
     InputData dataIn = new InputData();
+
     OutputData dataOut = new OutputData();
 
-    public void inputAction() throws IOException {
-        //načtení txt
-        dataIn.setInputFile("/Users/richardskrivanek/Desktop/input.txt");
-        dataIn.readTxtFile();
-        //nastavení inputDat v outputu
-        dataOut.createOutputData(dataIn.getInput());
-        dataOut.printOutput();
-
-        dataOut.setOutputFile("/Users/richardskrivanek/Desktop/output.txt");
-        dataOut.writeOutput();
-    }
+    private Boolean txtInput;
 
     @Override
     public void run(String inputType, String outputType) throws IOException{
-           if(inputType.contains("/input.txt")) {
+           if(txtInput) {
                dataIn.setInputFile(inputType);
                dataIn.readTxtFile();
            }else {
-               try {
-                   if (Integer.parseInt(inputType) >= 0) {
-                       dataIn.readLine();
-                   }
-               } catch (NumberFormatException ex) {
-                   System.out.println("Enter valid number or path.");
-               }
+               dataIn.readLine();
            }
 
            dataOut.createOutputData(dataIn.getInput());
@@ -50,5 +39,9 @@ public class DataActionImpl implements DataActionInt {
     @Override
     public void run(String inputType) throws IOException{
         run(inputType, "");
+    }
+
+    public void setTxtInput(Boolean txtInput) {
+        this.txtInput = txtInput;
     }
 }
